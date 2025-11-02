@@ -1,0 +1,111 @@
+/* FULL-SCREEN & MODERN USER PROFILE */
+
+.profile-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #808080 0%, #1a1e25 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #000;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.profile-header {
+  padding: 2rem 1.5rem 1rem;
+}
+
+.avatar-placeholder {
+  width: 90px;
+  height: 90px;
+  background: #007bff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.avatar-initial {
+  user-select: none;
+}
+
+.profile-title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.profile-body {
+  padding: 1.5rem;
+}
+
+.profile-info {
+  margin-bottom: 1.5rem;
+  text-align: left;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #555;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.info-value {
+  font-size: 1.1rem;
+  color: #000;
+  font-weight: 500;
+}
+
+.logout-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #c82333;
+}
+
+.no-user {
+  color: #666;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .profile-card {
+    margin: 1rem;
+  }
+  .profile-title {
+    font-size: 1.5rem;
+  }
+}

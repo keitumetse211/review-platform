@@ -1,0 +1,42 @@
+/* FULL SCREEN — NO GAPS, NO SCROLL */
+.home-container {
+  height: 85vh;           /* Full viewport height */
+  width: 100vw;            /* Full viewport width */
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #7b89a4 0%, #020306 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+}
+
+.home-content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 90%;
+}
+
+.home-title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  line-height: 1.2;
+  color: white;
+}
+
+.home-subtitle {
+  font-size: 1.5rem;
+  margin: 0;
+  line-height: 1.6;
+  opacity: 0.95;
+  color: white;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .home-title { font-size: 2.4rem; }
+  .home-subtitle { font-size: 1.3rem; }
+}
