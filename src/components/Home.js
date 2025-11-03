@@ -5,9 +5,9 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-content">
-        <h1 className="home-title">WELCOME TO THE REVIEW PLATFORM</h1>
+        <h1 className="home-title">WELCOME TO THE MOVIE REVIEW PLATFORM</h1>
         <p className="home-subtitle">
-          Discover, Create, and share reviews for <strong>Movies</strong> and <strong>Restaurants</strong>
+          Discover, Create, and share reviews for <strong>Movies</strong>
         </p>
       </div>
     </div>

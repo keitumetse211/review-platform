@@ -11,6 +11,7 @@ import Search from './components/Search';
 import SearchResults from './components/SearchResults';
 import Register from './components/Register';
 import CreateReview from './components/CreateReview';
+import MovieDetails from './components/MovieDetails'; // NEW
 
 function App() {
   // ──────────────────────────────────────────────────────────────
@@ -38,13 +39,12 @@ function App() {
     const newReview = {
       ...review,
       id: Date.now(),
-      author: currentUser?.email || 'Anonymous', // Save email
+      author: currentUser?.email || 'Anonymous',
       date: new Date().toISOString().split('T')[0],
     };
     setReviews([...reviews, newReview]);
   };
 
-  // Update review (keep original author)
   const updateReview = (updatedReview) => {
     setReviews(reviews.map(r =>
       r.id === updatedReview.id
@@ -53,13 +53,11 @@ function App() {
     ));
   };
 
-  // Delete review
   const deleteReview = (id) => {
     setReviews(reviews.filter(r => r.id !== id));
   };
   // ──────────────────────────────────────────────────────────────
 
-  // Handle user registration
   const handleRegister = (userData) => {
     const newUser = { ...userData, id: Date.now() };
     setUsers([...users, newUser]);
@@ -67,7 +65,6 @@ function App() {
     alert('Registration successful! You are now logged in.');
   };
 
-  // Handle login
   const handleLogin = (email, password) => {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
@@ -80,12 +77,9 @@ function App() {
     }
   };
 
-  // ──────────────────────────────────────────────────────────────
-  // Protected Route – Only logged-in users
   const ProtectedRoute = ({ children }) => {
     return currentUser ? children : <Navigate to="/register" replace />;
   };
-  // ──────────────────────────────────────────────────────────────
 
   return (
     <Router>
@@ -107,7 +101,7 @@ function App() {
               }
             />
 
-            {/* My Reviews – Show only current user's reviews */}
+            {/* My Reviews */}
             <Route
               path="/MyReviews"
               element={
@@ -146,8 +140,14 @@ function App() {
             />
 
             {/* Search */}
-            <Route path="/search" element={<Search reviews={reviews} />} />
+            <Route path="/search" element={<Search currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
             <Route path="/details/search" element={<SearchResults reviews={reviews} />} />
+
+            {/* Movie Details – NEW */}
+            <Route
+              path="/movie/:id"
+              element={<MovieDetails currentUser={currentUser} setCurrentUser={setCurrentUser} reviews={reviews} />}
+            />
 
             {/* 404 */}
             <Route

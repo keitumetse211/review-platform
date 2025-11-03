@@ -1,86 +1,92 @@
+// src/pages/Search.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Search.css'; // Optional – create for styling
+import Navbar from '../components/Navbar';
+import './Search.css';
 
-const Search = ({ reviews }) => {
+const API_KEY = '3fd2be6f0c70a2a598f084ddfb75487c';
+const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
+
+const Search = ({ currentUser, setCurrentUser }) => {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
-  // Handle input change
-  const handleInputChange = (e) => {
-    setQuery(e.target.value);
-    setError(''); // Clear error on type
-  };
-
-  // Handle search button click
-  const handleSearch = (e) => {
-    e.preventDefault(); // Prevent page reload
-
-    if (!query.trim()) {
-      setError('Please enter a search term (e.g., movie or restaurant name).');
-      return;
-    }
+  const searchMovies = async (e) => {
+    if (e) e.preventDefault();
+    if (!query.trim()) return;
 
     setLoading(true);
-    setError('');
+    setResults([]);
 
-    // Simulate a tiny delay (remove if not needed)
-    setTimeout(() => {
-      // Navigate to results with query param
-      navigate(`/details/search?query=${encodeURIComponent(query.trim())}`);
+    try {
+      const res = await fetch(
+        `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`
+      );
+      const data = await res.json();
+      setResults(data.results?.slice(0, 12) || []);
+    } catch (err) {
+      console.error('Search failed:', err);
+      setResults([]);
+    } finally {
       setLoading(false);
-    }, 300);
+    }
   };
 
-  // Optional: Live preview of results (client-side filter)
-  const filteredResults = reviews.filter((review) =>
-    review.title.toLowerCase().includes(query.toLowerCase()) ||
-    review.review.toLowerCase().includes(query.toLowerCase())
-  );
+  const goToMovie = (movie) => {
+    if (!movie?.id) return;
+    navigate(`/movie/${movie.id}`, { state: movie });
+  };
 
   return (
-    <div className="search-container">
-      <h2>Search Movies & Restaurants</h2>
-      
-      <form onSubmit={handleSearch} className="search-form">
-        <div className="input-group">
+    <div className="search-page">
+      {/* Pass minimal prop to hide menu items */}
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} minimal />
+
+      <div className="search-container">
+        <h1 className="search-title">Search Movies</h1>
+
+        <form onSubmit={searchMovies} className="search-wrapper search-form-inline">
           <input
             type="text"
-            placeholder="Search for a movie or restaurant (e.g., 'Avengers' or 'McDonalds')"
+            placeholder="e.g. Avengers, Inception..."
             value={query}
-            onChange={handleInputChange}
-            className="search-input"
+            onChange={(e) => setQuery(e.target.value)}
           />
-          <button 
-            type="submit" 
-            className={`search-btn ${loading ? 'loading' : ''}`}
-            disabled={loading}
-          >
-            {loading ? 'Searching...' : 'Search'}
+          <button type="submit" disabled={loading}>
+            {loading ? '...' : 'Search'}
           </button>
-        </div>
-        
-        {error && <p className="error">{error}</p>}
-      </form>
+        </form>
 
-      {/* Optional: Live Preview (shows as you type) */}
-      {query && filteredResults.length > 0 && !loading && (
-        <div className="live-preview">
-          <h3>Quick Preview:</h3>
-          <ul>
-            {filteredResults.slice(0, 5).map((review) => (
-              <li key={review.id}>
-                <strong>{review.title}</strong> ({review.type}) - Rating: {review.rating}/10
-              </li>
+        {results.length > 0 && (
+          <div className="movie-grid">
+            {results.map((movie) => (
+              <div
+                key={movie.id}
+                className="movie-card"
+                onClick={() => goToMovie(movie)}
+              >
+                <img
+                  src={
+                    movie.poster_path
+                      ? `${IMG_BASE}${movie.poster_path}`
+                      : 'https://via.placeholder.com/300x450?text=No+Image'
+                  }
+                  alt={movie.title}
+                />
+                <div className="movie-info">
+                  <h3>{movie.title}</h3>
+                  <p>{movie.release_date?.split('-')[0] || '????'}</p>
+                  <div className="rating">
+                    {movie.vote_average != null ? movie.vote_average.toFixed(1) : '?.?'}/10
+                  </div>
+                </div>
+              </div>
             ))}
-            {filteredResults.length > 5 && (
-              <li>... and {filteredResults.length - 5} more</li>
-            )}
-          </ul>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
